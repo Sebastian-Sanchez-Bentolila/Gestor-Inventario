@@ -1,0 +1,235 @@
+# Configuración de botones
+<CustomButton@Button>:
+    background_color: "#2926F4"
+    color: 1, 1, 1, 1
+    border: (1, 1, 1, 1)
+    background_normal: ''
+    background_down: ''
+    canvas.before:
+        Color:
+            rgba: (0.16, 0.15, 0.95, 1)  
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: (1, 1, 1, 1)  
+        Line:
+            width: 2
+            rectangle: (self.x, self.y, self.width, self.height)
+
+# Configuración de cada producto en el inventario que se muestra en la pantalla home
+<Row@BoxLayout>:
+    id: row
+    canvas.before:
+        Color:
+            rgba: 0.5, 0.5, 0.5, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    id:''
+    producto: ''
+    cantidad:''
+    costo:''
+    precio_venta:''
+    proveedor: ''
+    categoria: ''
+    BoxLayout:
+        padding: [1,1,1,1]
+        size_hint_x:  .75
+        Label:
+            id: box
+            valign: "middle"
+            halign: "left"
+            text: root.valor 
+            bold: True        
+        Button:
+            size_hint_x: .1
+            background_normal: 'img/borrar.png'
+            on_release: root.borrar()
+            #background_color: .7,0,0,1
+
+# Pantalla Home
+<HomeScreen>:
+    name: "home"
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: (0.75, 0.85, 1, 1)  
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Tabla de Mercaderias/Productos"
+            font_size: 32
+            color: 0, 0, 0, 1
+        
+        RecycleView:
+            viewclass: 'row'
+            id: productos_grid
+            cols: 1
+            size_hint_y: None
+                
+        CustomButton:
+            text: "Volver al Menú"
+            on_press: root.manager.current = 'menu'
+
+# Pantalla de Alta
+<AltaScreen>:
+    name: "alta"
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: (0.75, 0.85, 1, 1)  
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Agregar Nuevo Producto"
+            font_size: 32
+            color: 0, 0, 0, 1
+        TextInput:
+            id: producto
+            hint_text: "Nombre del Producto"
+        TextInput:
+            id: cantidad
+            hint_text: "Cantidad"
+            input_filter: 'int'
+        TextInput:
+            id: costo
+            hint_text: "Costo"
+            input_filter: 'float'
+        TextInput:
+            id: precio_venta
+            hint_text: "Precio de Venta"
+            input_filter: 'float'
+        TextInput:
+            id: proveedor
+            hint_text: "Proveedor"
+        TextInput:
+            id: categoria
+            hint_text: "categoria"
+        CustomButton:
+            text: "Agregar Producto"
+            on_press:
+                root.agregar_producto(producto.text, cantidad.text, costo.text, precio_venta.text, proveedor.text, categoria.text)
+        CustomButton:
+            text: "Volver al Menú"
+            on_press: root.manager.current = 'menu'
+
+# Pantalla de creador
+<CreadorScreen>:
+    name: "creador"
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: (0.75, 0.85, 1, 1)  
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Image:
+            source: 'archivos/img/foto_creador.jpg'
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+        Label:
+            text: "Sebastian Sanchez Bentolila"
+            font_size: 32
+            color: 0, 0, 0, 1
+        Label:
+            text: "Hola, ¿qué tal? Me llamo Sebas, tengo 19 años y vivo en Llavallol, Buenos Aires, Argentina. Comencé a estudiar programación en cuarto año del secundario (2020), ya que en la materia Informática vimos los aspectos básicos de Ansi C. Eso me llevó a investigar más sobre el tema, y realicé el curso gratuito de C++ de Programación ATS en Youtube, y su gran frase: 'Si lo puedes imaginar, lo puedes programar'. Sin duda, mi gran ídolo, que en paz descanse. \n\nLuego en el verano antes de comenzar el último año escolar (2022), decidí aprender Python. Y fue sin duda el destino, ya que de allí comenzó mi viaje. Empecé a hacer cursos, prácticas, talleres, y sin duda trato de mantenerme al día y siempre motivado. Como diría Richard Branson: 'No se aprende a caminar siguiendo las reglas. Se aprende caminando y cayendo'. Me considero un autodidacta! \n\nA lo largo de estos años he realizado proyectos y aplicaciones de manera independiente, lo pueden encontrar la mayoría en mi GitHub. Actualmente estoy cursando el segundo año de la carrera Ciencia de Datos en la Universidad Nacional de Guillermo Brown (UNAB). \n\nSoy también cicloviajero con muchos viajes encima y ambiciones para el futuro. Actualmente me encuentro haciendo un curso de mecánica de bicicleta en la Universidad Nacional de Lanús (UNLA)."
+            font_size: 18
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            text_size: self.width, None
+            height: self.texture_size[1]
+        BoxLayout:
+            size_hint: (1, 0.2)
+            CustomButton:
+                text: "Instagram"
+                background_color: (0.9, 0.3, 0.5, 1)  # color rosa
+                on_press: app.open_link("https://www.instagram.com/sebas_sanchez_bentolila/")
+            CustomButton:
+                text: "GitHub"
+                background_color: (0, 0, 0, 1)  # color negro
+                on_press: app.open_link("https://github.com/Sebastian-Sanchez-Bentolila")
+            CustomButton:
+                text: "Linkedin"
+                background_color: (0, 0.5, 0.9, 1)  # color azul
+                on_press: app.open_link("https://www.linkedin.com/in/sebastian-sanchez-bentolila/")
+            CustomButton:
+                text: "Portafolio Web"
+                background_color: (1, 0.8, 0, 1)  # color amarillo
+                on_press: app.open_link("https://sebastian-sanchez-bentolila.netlify.app/")
+        CustomButton:
+            text: "Volver al Menú"
+            on_press: root.manager.current = 'menu'
+
+# Pantalla de estadistica
+<EstadisticasScreen>:
+    name: "estadisticas"
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: (0.75, 0.85, 1, 1)  
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Estadísticas del Inventario"
+            font_size: 32
+            color: 0, 0, 0, 1
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                id: total_productos
+                text: "Cantidad Total de Productos: "
+                font_size: 24
+                color: 0, 0, 0, 1
+            Label:
+                id: mayor_stock
+                text: "Producto con Mayor Stock: "
+                font_size: 24
+                color: 0, 0, 0, 1
+            Label:
+                id: menor_stock
+                text: "Producto con Menor Stock: "
+                font_size: 24
+                color: 0, 0, 0, 1
+            Label:
+                id: valor_total_inventario
+                text: "Valor Total del Inventario (en costos): "
+                font_size: 24
+                color: 0, 0, 0, 1
+            Label:
+                id: ingresos_potenciales
+                text: "Ingresos Potenciales (por ventas): "
+                font_size: 24
+                color: 0, 0, 0, 1
+        BoxLayout:
+            cols: 2  
+            orientation: 'vertical'  
+            padding: 10
+            spacing: 10    
+            Image:
+                source: 'archivos/img/grafico_barras.png'  
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+            Image:
+                source: 'archivos/img/grafico_torta.png'  
+                center_x: self.parent.center_x
+                center_y: self.parent.center_y
+        CustomButton:
+            text: "Volver al Menú"
+            background_color: (0.16, 0.15, 0.95, 1)
+            on_press: root.manager.current = 'menu'

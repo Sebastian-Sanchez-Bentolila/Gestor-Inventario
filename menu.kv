@@ -1,0 +1,38 @@
+# menu.kv
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+
+ScreenManager:
+    transition: NoTransition()
+    MenuScreen:
+    HomeScreen:
+    AltaScreen:
+    CreadorScreen:
+
+<MenuScreen>:
+    name: "menu"
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: (0.75, 0.85, 1, 1)  # color de fondo azul claro
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Gestor de Inventario ©"
+            font_size: 32
+            color: 0, 0, 0, 1
+        Button:
+            text: "Home"
+            on_press: root.manager.current = 'home'
+        Button:
+            text: "Alta"
+            on_press: root.manager.current = 'alta'
+        Button:
+            text: "Estadisticas"
+            on_press: root.manager.current = 'estadisticas'
+        Button:
+            text: "Creador"
+            on_press: root.manager.current = 'creador'
