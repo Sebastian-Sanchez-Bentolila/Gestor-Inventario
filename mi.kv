@@ -17,37 +17,6 @@
             width: 2
             rectangle: (self.x, self.y, self.width, self.height)
 
-# Configuración de cada producto en el inventario que se muestra en la pantalla home
-<Row@BoxLayout>:
-    id: row
-    canvas.before:
-        Color:
-            rgba: 0.5, 0.5, 0.5, 1
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    id:''
-    producto: ''
-    cantidad:''
-    costo:''
-    precio_venta:''
-    proveedor: ''
-    categoria: ''
-    BoxLayout:
-        padding: [1,1,1,1]
-        size_hint_x:  .75
-        Label:
-            id: box
-            valign: "middle"
-            halign: "left"
-            text: root.valor 
-            bold: True        
-        Button:
-            size_hint_x: .1
-            background_normal: 'img/borrar.png'
-            on_release: root.borrar()
-            #background_color: .7,0,0,1
-
 # Pantalla Home
 <HomeScreen>:
     name: "home"
@@ -65,13 +34,22 @@
             text: "Tabla de Mercaderias/Productos"
             font_size: 32
             color: 0, 0, 0, 1
-        
-        RecycleView:
-            viewclass: 'row'
-            id: productos_grid
-            cols: 1
-            size_hint_y: None
+
+        Label:
+            text: "ID     Producto      Cantidad      Costo   Precio_venta    Proveedor   Categoria"
+            font_size: 28
+            color: 0, 0, 0, 1
                 
+        BoxLayout:
+            size_hint: (1, None)
+            height: 500  # Ajusta según lo necesario
+            GridLayout:
+                id: product_grid
+                cols: 1
+                spacing: 50
+                size_hint_y: None
+                height: self.minimum_height
+
         CustomButton:
             text: "Volver al Menú"
             on_press: root.manager.current = 'menu'

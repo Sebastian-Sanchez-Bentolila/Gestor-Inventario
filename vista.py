@@ -4,21 +4,10 @@
 # Librerías
 from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
-from modelo import BaseDatos
-
-#Clases
-class Row(BoxLayout):
-    # Para borrar productos del inventario
-    def __init__(self,):
-        super(Row, self).__init__()
-
-    def borrar(self,):
-        id_item = str(self.ids.box.text).split()[1]
-        print(id_item)
-        db = BaseDatos()
-        db.borrar(id_item)
-        db.cerrar_db()
-        
+from kivy.uix.label import Label
+from kivy.graphics import Color, Rectangle
+from kivy.uix.button import Button
+from modelo import BaseDatos  
 
 # Clases que dan origen a las ventanas       
 class MenuScreen(Screen):
@@ -35,20 +24,50 @@ class HomeScreen(Screen):
         try:
             db = BaseDatos()
             productos = db.seleccionar_todos()
+            product_grid = self.ids.product_grid
+            product_grid.clear_widgets()  # Limpiar widgets existentes
 
-            self.ids.row = [
-                {
-                    "id":f"{x[0]}",       
-                    "producto":f"{x[1]}",
-                    "cantidad":f"{x[2]}", 
-                    "costo":f"{x[3]}",
-                    "precio_venta":f"{x[4]}",
-                    "proveedor":f"{x[5]}",
-                    "categoria":f"{x[6]}",
-                }
-                for x in productos]
+            for producto in productos:
+                producto_id, nombre, cantidad, costo, precio_venta, proveedor, categoria = producto
+                
+                box = BoxLayout(orientation='horizontal', padding=50, spacing=50)
+                with box.canvas.before:
+                    Color(0, 0, 0, 0.1)  # Color de fondo (negro translúcido)
+                    Rectangle(pos=box.pos, size=box.size)
+                
+                box.bind(size=self._update_rect, pos=self._update_rect)
+
+                box.add_widget(Label(text=f"ID: {producto_id}", color=(0, 0, 0, 1), font_size=18))
+                box.add_widget(Label(text=f"{nombre}", color=(0, 0, 0, 1), font_size=18))
+                box.add_widget(Label(text=f"{cantidad}", color=(0, 0, 0, 1), font_size=18))
+                box.add_widget(Label(text=f"{costo}", color=(0, 0, 0, 1), font_size=18))
+                box.add_widget(Label(text=f"{precio_venta}", color=(0, 0, 0, 1), font_size=18))
+                box.add_widget(Label(text=f"{proveedor}", color=(0, 0, 0, 1), font_size=18))
+                box.add_widget(Label(text=f"{categoria}", color=(0, 0, 0, 1), font_size=18))
+                
+                # Botón de eliminar
+                eliminar_btn = Button(text="Eliminar", size_hint=(None, None), size=(100, 30))
+                eliminar_btn.bind(on_press=lambda instance, pid=producto_id: self.eliminar_producto(pid))
+                box.add_widget(eliminar_btn)
+
+                product_grid.add_widget(box)
+
         except Exception as e:
             print(f"Error al cargar producto: {e}")
+            
+    def eliminar_producto(self, producto_id):
+        try:
+            db = BaseDatos()
+            db.borrar(producto_id)
+            self.cargar_productos()  # Recargar productos después de eliminar
+        except Exception as e:
+            print(f"Error al eliminar producto: {e}")
+
+    def _update_rect(self, instance, value):
+        instance.canvas.before.clear()
+        with instance.canvas.before:
+            Color(0, 0, 0, 0.1)  # Color de fondo (negro translúcido)
+            Rectangle(pos=instance.pos, size=instance.size)
         
 
 class AltaScreen(Screen):
@@ -75,33 +94,6 @@ class CreadorScreen(Screen):
     # Clase de la pagina - Creador
     pass
 
-'''
-class ProductoWidget(BoxLayout):
-    def __init__(self,):
-        db = BaseDatos()
-        resultado = db.seleccionar_todos()
-        self.ids.row = [
-                {
-                    "id":f"{x[0]}",       
-                    "producto":f"{x[1]}",
-                    "cantidad":f"{x[2]}", 
-                    "costo":f"{x[3]}",
-                    "precio_venta":f"{x[4]}",
-                    "proveedor":f"{x[5]}",
-                    "categoria":f"{x[6]}",
-                }
-                for x in resultado]
-
-    def modificar_producto(self):
-        # Implementar la lógica para modificar el producto
-        pass
-
-    def eliminar_producto(self):
-        # Lógica para eliminar el producto
-        db = self.parent.parent.parent.db
-        db.borrar(self.producto)
-        self.parent.remove_widget(self) '''
-        
 class EstadisticasScreen(Screen):
     # Clase de la pagina - Estadisticas
     def on_enter(self, *args):
@@ -111,5 +103,4 @@ class EstadisticasScreen(Screen):
         self.ids.mayor_stock.text = f"Producto con Mayor Stock: {stats['mayor_stock'][0]} ({stats['mayor_stock'][1]})"
         self.ids.menor_stock.text = f"Producto con Menor Stock: {stats['menor_stock'][0]} ({stats['menor_stock'][1]})"
         self.ids.valor_total_inventario.text = f"Costos Totales: ${stats['valor_total_inventario']}"
-        self.ids.ingresos_potenciales.text = f"Ingresos Potenciales (ventas): ${stats['ingresos_potenciales']}"
-        
+        self.ids.ingresos_potenciales.text = f"Ingresos Potenciales (ventas): ${stats['ingresos_potenciales']}"        
