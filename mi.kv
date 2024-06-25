@@ -40,19 +40,19 @@
             font_size: 28
             color: 0, 0, 0, 1
                 
-        BoxLayout:
-            size_hint: (1, None)
-            height: 500  # Ajusta según lo necesario
+        ScrollView:
             GridLayout:
                 id: product_grid
                 cols: 1
-                spacing: 50
                 size_hint_y: None
                 height: self.minimum_height
+                spacing: 10
+                padding: 10
 
         CustomButton:
             text: "Volver al Menú"
             on_press: root.manager.current = 'menu'
+
 
 # Pantalla de Alta
 <AltaScreen>:
@@ -115,8 +115,9 @@
                 size: self.size
         Image:
             source: 'archivos/img/foto_creador.jpg'
-            center_x: self.parent.center_x
-            center_y: self.parent.center_y
+            size_hint: (1, 1.5)  
+            allow_stretch: True  
+            keep_ratio: True 
         Label:
             text: "Sebastian Sanchez Bentolila"
             font_size: 32
@@ -195,18 +196,16 @@
                 font_size: 24
                 color: 0, 0, 0, 1
         BoxLayout:
-            cols: 2  
+            cols:1
             orientation: 'vertical'  
             padding: 10
-            spacing: 10    
+            spacing: 10
             Image:
                 source: 'archivos/img/grafico_barras.png'  
-                center_x: self.parent.center_x
-                center_y: self.parent.center_y
+                height: 500
             Image:
                 source: 'archivos/img/grafico_torta.png'  
-                center_x: self.parent.center_x
-                center_y: self.parent.center_y
+                height: 500
         CustomButton:
             text: "Volver al Menú"
             background_color: (0.16, 0.15, 0.95, 1)

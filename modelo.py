@@ -65,7 +65,7 @@ class BaseDatos():
     def borrar(self, producto:int):
         # Borra algun stock que se haya vendido o consumido
         data = (producto,)
-        self.sql = "DELETE from stock where producto = ?;"
+        self.sql = "DELETE from stock where id = ?;"
         self.cursor.execute(self.sql, data)
         self.guardar_cambios()
         
@@ -142,7 +142,7 @@ class BaseDatos():
         cantidades = [cantidad for _, cantidad in productos_por_categoria]
         
         # Gráfico de Barras
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(8, 8))
         sns.barplot(x=categorias, y=cantidades)
         plt.title('Cantidad de Productos por Categoría')
         plt.xlabel('Categoría')
@@ -165,19 +165,3 @@ class BaseDatos():
             'valor_total_inventario': valor_total_inventario,
             'ingresos_potenciales': ingresos_potenciales
         }
-            
-
-x = BaseDatos()
-#x.insertar("leche", 56, 5000, 6700, "Pepe", "Lacteos")
-#x.insertar("manteca", 100, 1000, 15000, "serenisima", "Lacteos")
-#x.insertar("fideos", 450, 234, 678, "moños", "Comestible")
-#x.insertar("yogut", 10, 10, 1, "serenisima", "Lacteos")
-#x.insertar("teclado", 99, 9870, 2345, "pc-exclente calidad", "Computadoras")
-#x.insertar("botella", 4, 56, 234, "sancor", "agua")
-#x.insertar("cable", 100, 1000, 15000, "ferreteria", "electricidad")
-#x.insertar("camara", 678, 50000, 98000, "sony", "Fotografias")
-x.borrar("manteca")
-#y = x.seleccionar("leche")
-#print(y)
-x.modificar(id=5, proveedor="Juaooannn")
-x.cerrar_db()

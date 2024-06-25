@@ -15,22 +15,22 @@ class MenuScreen(Screen):
     pass
 
 class HomeScreen(Screen):  
-    # Clase de la pagina - Home              
     def on_enter(self, **kw):
-        super(HomeScreen, self).__init__(**kw)
+        super(HomeScreen, self).on_enter(**kw)
         self.cargar_productos()
 
     def cargar_productos(self):
         try:
             db = BaseDatos()
             productos = db.seleccionar_todos()
+            db.cerrar_db()
             product_grid = self.ids.product_grid
             product_grid.clear_widgets()  # Limpiar widgets existentes
 
             for producto in productos:
                 producto_id, nombre, cantidad, costo, precio_venta, proveedor, categoria = producto
                 
-                box = BoxLayout(orientation='horizontal', padding=50, spacing=50)
+                box = BoxLayout(orientation='horizontal', padding=10, spacing=10, size_hint_y=None, height=50)
                 with box.canvas.before:
                     Color(0, 0, 0, 0.1)  # Color de fondo (negro translúcido)
                     Rectangle(pos=box.pos, size=box.size)
@@ -47,28 +47,31 @@ class HomeScreen(Screen):
                 
                 # Botón de eliminar
                 eliminar_btn = Button(text="Eliminar", size_hint=(None, None), size=(100, 30))
-                eliminar_btn.bind(on_press=lambda instance, pid=producto_id: self.eliminar_producto(pid))
+                eliminar_btn.producto_id = producto_id  # Guardar el producto_id en el botón
+                eliminar_btn.bind(on_press=self.eliminar_producto)
                 box.add_widget(eliminar_btn)
 
                 product_grid.add_widget(box)
 
         except Exception as e:
-            print(f"Error al cargar producto: {e}")
+            print(f"Error al cargar productos: {e}")
             
-    def eliminar_producto(self, producto_id):
+    def eliminar_producto(self, instance):
+        producto_id = instance.producto_id  # Obtener el producto_id del botón
+        print(f"Intentando eliminar producto con ID: {producto_id}")  # Depuración
         try:
             db = BaseDatos()
             db.borrar(producto_id)
+            db.cerrar_db()
+            print(f"Producto con ID {producto_id} eliminado exitosamente.")  # Depuración
             self.cargar_productos()  # Recargar productos después de eliminar
         except Exception as e:
             print(f"Error al eliminar producto: {e}")
 
     def _update_rect(self, instance, value):
-        instance.canvas.before.clear()
-        with instance.canvas.before:
-            Color(0, 0, 0, 0.1)  # Color de fondo (negro translúcido)
-            Rectangle(pos=instance.pos, size=instance.size)
-        
+        instance.canvas.before.children[-1].pos = instance.pos
+        instance.canvas.before.children[-1].size = instance.size
+       
 
 class AltaScreen(Screen):
     # Clase de la pagina - Alta
