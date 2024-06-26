@@ -20,7 +20,7 @@ class InventarioApp(App):
     
     def build(self):
         sm = ScreenManager()
-        db = BaseDatos()  # Crear una instancia de la base de datos
+        db = BaseDatos()  # Instancia de la base de datos
         sm.add_widget(MenuScreen(name='menu'))
         sm.add_widget(HomeScreen(name='home'))
         sm.add_widget(AltaScreen(name='alta'))
@@ -39,6 +39,7 @@ class InventarioApp(App):
         db.insertar(producto, int(cantidad), float(costo), float(precio_venta), proveedor, categoria)
         
     def open_link(self, url):
+        # Abrir link externos que te lleven al navegador predeterminado
         webbrowser.open(url)
 
 if __name__ == '__main__':

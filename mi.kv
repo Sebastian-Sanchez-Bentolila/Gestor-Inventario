@@ -232,18 +232,19 @@
                 text: "Ingresos Potenciales (por ventas): "
                 font_size: 24
                 color: 0, 0, 0, 1
-        BoxLayout:
-            cols:1
-            orientation: 'vertical'  
-            padding: 10
-            spacing: 10
-            size_hint: (1, 4.5)
-            Image:
-                id: img_stats
-                source: 'archivos/img/grafico_barras.png'  
-            Image:
-                id: img_stats
-                source: 'archivos/img/grafico_torta.png'  
+        ScrollView:
+            BoxLayout:
+                cols:1
+                orientation: 'vertical'  
+                padding: 10
+                spacing: 10
+                size_hint: (1, 4.5)
+                Image:
+                    id: img_stats
+                    source: 'archivos/img/grafico_barras.png'  
+                Image:
+                    id: img_stats
+                    source: 'archivos/img/grafico_torta.png'
         CustomButton:
             text: "Volver al Menú"
             background_color: (0.16, 0.15, 0.95, 1)

@@ -3,8 +3,6 @@
 
 # Librerias
 import sqlite3
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Clases
 class BaseDatos():
@@ -114,26 +112,6 @@ class BaseDatos():
         ingresos_potenciales = self.cursor.fetchone()[0]
 
         self.guardar_cambios()
-        
-        # Crear gráficos
-        categorias = [categoria for categoria, _ in productos_por_categoria]
-        cantidades = [cantidad for _, cantidad in productos_por_categoria]
-        
-        # Gráfico de Barras
-        plt.figure(figsize=(8, 8))
-        sns.barplot(x=categorias, y=cantidades)
-        plt.title('Cantidad de Productos por Categoría')
-        plt.xlabel('Categoría')
-        plt.ylabel('Cantidad')
-        plt.savefig('archivos/img/grafico_barras.png')
-        plt.close()
-
-        # Gráfico de Torta
-        plt.figure(figsize=(8, 8))
-        plt.pie(cantidades, labels=categorias, autopct='%1.1f%%', startangle=140)
-        plt.title('Porcentaje de Productos por Categoría')
-        plt.savefig('archivos/img/grafico_torta.png')
-        plt.close()
         
         return {
             'total_productos': total_productos,

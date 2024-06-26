@@ -8,6 +8,8 @@ from kivy.uix.label import Label
 from kivy.graphics import Color, Rectangle
 from kivy.uix.button import Button
 from modelo import BaseDatos  
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Clases que dan origen a las ventanas       
 class MenuScreen(Screen):
@@ -15,6 +17,7 @@ class MenuScreen(Screen):
     pass
 
 class HomeScreen(Screen):  
+    # Clase de la pagina -Home-, donde figurarán cada item de la base de datos
     def on_enter(self, **kw):
         super(HomeScreen, self).on_enter(**kw)
         self.cargar_productos()
@@ -46,8 +49,8 @@ class HomeScreen(Screen):
                 box.add_widget(Label(text=f"{proveedor}", color=(0, 0, 0, 1), font_size=18))
                 box.add_widget(Label(text=f"{categoria}", color=(0, 0, 0, 1), font_size=18))
                 
-                # Botón de modificar
-                editar_btn = Button(size_hint=(None, None), size=(50, 50))
+                # Botón de modificar {´´}¨´{´¨¨'?¡{o}}
+                editar_btn = Button(size_hint=(None, None), size=(45, 45))
                 editar_btn.background_normal = 'archivos/img/editar.png'  
                 editar_btn.producto_id = producto_id
                 editar_btn.bind(on_press=self.editar_producto)
@@ -55,7 +58,7 @@ class HomeScreen(Screen):
                 
                 # Botón de eliminar
                 eliminar_btn = Button(text="Eliminar", size_hint=(None, None), size=(100, 30))
-                eliminar_btn.producto_id = producto_id  # Guardar el producto_id en el botón
+                eliminar_btn.producto_id = producto_id  
                 eliminar_btn.bind(on_press=self.eliminar_producto)
                 box.add_widget(eliminar_btn)
 
@@ -66,12 +69,12 @@ class HomeScreen(Screen):
             
     def eliminar_producto(self, instance):
         producto_id = instance.producto_id  # Obtener el producto_id del botón
-        print(f"Intentando eliminar producto con ID: {producto_id}")  # Depuración
+        print(f"Intentando eliminar producto con ID: {producto_id}")  
         try:
             db = BaseDatos()
             db.borrar(producto_id)
             db.cerrar_db()
-            print(f"Producto con ID {producto_id} eliminado exitosamente.")  # Depuración
+            print(f"Producto con ID {producto_id} eliminado exitosamente.")  
             self.cargar_productos()  # Recargar productos después de eliminar
         except Exception as e:
             print(f"Error al eliminar producto: {e}")
@@ -90,7 +93,7 @@ class HomeScreen(Screen):
        
 
 class AltaScreen(Screen):
-    # Clase de la pagina - Alta
+    # Clase de la pagina - Alta de productos
     def agregar_producto(self, producto, cantidad, costo, precio_venta, proveedor, categoria):
         try:
             if not producto or not cantidad or not costo or not precio_venta or not proveedor or not categoria:
@@ -110,6 +113,7 @@ class AltaScreen(Screen):
             print(f"Error al agregar producto: {e}")
 
 class EditScreen(Screen):
+    # Clase de la pagina - Editar/Modificar un productos en particular
     def cargar_datos(self, producto):
         producto_id, nombre, cantidad, costo, precio_venta, proveedor, categoria = producto
         self.ids.producto_id.text = str(producto_id)
@@ -142,10 +146,33 @@ class EstadisticasScreen(Screen):
     def on_enter(self, *args):
         base_datos = BaseDatos()
         stats = base_datos.obtener_estadisticas()
+        # Estadísticas
         self.ids.total_productos.text = f"Cantidad Total de Productos: {stats['total_productos']}"
         self.ids.mayor_stock.text = f"Producto con Mayor Stock: {stats['mayor_stock'][0]} ({stats['mayor_stock'][1]})"
         self.ids.menor_stock.text = f"Producto con Menor Stock: {stats['menor_stock'][0]} ({stats['menor_stock'][1]})"
         self.ids.valor_total_inventario.text = f"Costos Totales: ${stats['valor_total_inventario']}"
         self.ids.ingresos_potenciales.text = f"Ingresos Potenciales (ventas): ${stats['ingresos_potenciales']}" 
-        img = self.ids.img_stats
-        img.clear_widgets()    
+        
+        # Gráficos
+        base_datos.cursor.execute('SELECT categoria, cantidad FROM stock')
+        productos = base_datos.cursor.fetchall()
+        
+        categorias = [producto[0] for producto in productos]
+        cantidades = [producto[1] for producto in productos]
+        
+        # Gráfico de Barras
+        plt.figure(figsize=(8, 8))
+        sns.barplot(x=categorias, y=cantidades)
+        plt.title('Cantidad de Productos por Categoría')
+        plt.xlabel('Categoría')
+        plt.ylabel('Cantidad')
+        plt.savefig('archivos/img/grafico_barras.png')
+        plt.close()
+
+        # Gráfico de Torta
+        plt.figure(figsize=(8, 8))
+        plt.pie(cantidades, labels=categorias, autopct='%1.1f%%', startangle=140)
+        plt.title('Porcentaje de Productos por Categoría')         
+        plt.savefig('archivos/img/grafico_torta.png')
+        plt.close()
+        base_datos.cerrar_db()
