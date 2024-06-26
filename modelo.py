@@ -43,7 +43,7 @@ class BaseDatos():
         self.con.close()
         
     def insertar(self, producto:str, cantidad:int, costo:float, precio_venta:float, proveedor:str, categoria:str):
-        # Insertar un nuevo stock
+        # Insertar un nuevo producto
         try:
             data = (producto, cantidad, costo, precio_venta, proveedor, categoria)
             self.sql = '''INSERT INTO stock(producto, cantidad, costo, precio_venta, proveedor, categoria) 

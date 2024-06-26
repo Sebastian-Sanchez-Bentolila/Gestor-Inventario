@@ -106,4 +106,6 @@ class EstadisticasScreen(Screen):
         self.ids.mayor_stock.text = f"Producto con Mayor Stock: {stats['mayor_stock'][0]} ({stats['mayor_stock'][1]})"
         self.ids.menor_stock.text = f"Producto con Menor Stock: {stats['menor_stock'][0]} ({stats['menor_stock'][1]})"
         self.ids.valor_total_inventario.text = f"Costos Totales: ${stats['valor_total_inventario']}"
-        self.ids.ingresos_potenciales.text = f"Ingresos Potenciales (ventas): ${stats['ingresos_potenciales']}"        
+        self.ids.ingresos_potenciales.text = f"Ingresos Potenciales (ventas): ${stats['ingresos_potenciales']}" 
+        img = self.ids.img_stats
+        img.clear_widgets()    

@@ -130,7 +130,7 @@
             text_size: self.width, None
             height: self.texture_size[1]
         BoxLayout:
-            size_hint: (1, 0.2)
+            size_hint: (1, 0.5)
             CustomButton:
                 text: "Instagram"
                 background_color: (0.9, 0.3, 0.5, 1)  # color rosa
@@ -200,12 +200,13 @@
             orientation: 'vertical'  
             padding: 10
             spacing: 10
+            size_hint: (1, 4.5)
             Image:
+                id: img_stats
                 source: 'archivos/img/grafico_barras.png'  
-                height: 500
             Image:
+                id: img_stats
                 source: 'archivos/img/grafico_torta.png'  
-                height: 500
         CustomButton:
             text: "Volver al Menú"
             background_color: (0.16, 0.15, 0.95, 1)
