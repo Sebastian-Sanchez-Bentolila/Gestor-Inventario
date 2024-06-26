@@ -4,7 +4,7 @@
 # Librerias
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
-from vista import MenuScreen, HomeScreen, AltaScreen, CreadorScreen, EstadisticasScreen
+from vista import MenuScreen, HomeScreen, AltaScreen, CreadorScreen, EstadisticasScreen, EditScreen
 from modelo import BaseDatos
 from kivy.lang import Builder
 import webbrowser
@@ -26,6 +26,7 @@ class InventarioApp(App):
         sm.add_widget(AltaScreen(name='alta'))
         sm.add_widget(EstadisticasScreen(name='estadisticas'))
         sm.add_widget(CreadorScreen(name='creador'))
+        sm.add_widget(EditScreen(name='edit'))
 
         # Pasar la instancia de la base de datos a cada pantalla
         for screen in sm.screens:

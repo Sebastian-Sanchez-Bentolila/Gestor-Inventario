@@ -60,6 +60,10 @@ class BaseDatos():
         self.cursor.execute(self.sql)
         rows = self.cursor.fetchall()
         return rows
+    
+    def seleccionar_producto(self, id):
+        self.cursor.execute('SELECT * FROM stock WHERE id=?', (id,))
+        return self.cursor.fetchone()
 
     
     def borrar(self, producto:int):
@@ -69,39 +73,13 @@ class BaseDatos():
         self.cursor.execute(self.sql, data)
         self.guardar_cambios()
         
-    def modificar(self, id:int, cantidad=0, costo=0.0, precio_venta=0.0, proveedor="", producto="", categoria=""):
-        # Actualiza algun elemento de la db
-        self.sql = "UPDATE stock SET "
-        data = []
-        
-        # Verificamos que haya ingresado dato para modificarlo, caso contrario quedara igual
-        if producto != "":
-            self.sql = self.sql + "producto=?, "  
-            data.append(producto) 
-        if cantidad != 0:
-            self.sql = self.sql + "cantidad=?, "
-            data.append(cantidad)
-        if costo != 0.0:
-            self.sql = self.sql + "costo=?, "
-            data.append(costo)
-        if precio_venta != 0.0:
-            self.sql = self.sql + "precio_venta=?, "
-            data.append(precio_venta)
-        if proveedor != "":
-            self.sql = self.sql + "proveedor=?, "
-            data.append(proveedor)
-        if categoria != "":
-            self.sql = self.sql + "categoria=?, "
-            data.append(proveedor)
-        
-        # Elimina la coma y el espacion final del comando de SQL   
-        self.sql = self.sql.rstrip(", ")
-        
-        data.append(id)   
-        data_tupla = tuple(data)
-        self.sql = self.sql + " WHERE id=?;"
-        self.cursor.execute(self.sql, data_tupla)
-        self.guardar_cambios()
+    def actualizar(self, id, producto, cantidad, costo, precio_venta, proveedor, categoria):
+        try:
+            data = (producto, cantidad, costo, precio_venta, proveedor, categoria, id)
+            self.cursor.execute('UPDATE stock SET producto=?, cantidad=?, costo=?, precio_venta=?, proveedor=?, categoria=? WHERE id=?', data)
+            self.guardar_cambios()
+        except sqlite3.Error as e:
+            print(f"Error al actualizar datos: {e}")
     
     def verificar_tabla(self,):
         # Verifica si la tabla 'stock' existe

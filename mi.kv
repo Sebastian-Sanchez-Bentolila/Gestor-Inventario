@@ -100,6 +100,43 @@
             text: "Volver al Menú"
             on_press: root.manager.current = 'menu'
 
+<EditScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        Label:
+            text: 'Editar Producto'
+            font_size: 24
+        TextInput:
+            id: producto_id
+            hint_text: 'ID del Producto'
+            readonly: True
+        TextInput:
+            id: producto
+            hint_text: 'Nombre del Producto'
+        TextInput:
+            id: cantidad
+            hint_text: 'Cantidad'
+        TextInput:
+            id: costo
+            hint_text: 'Costo'
+        TextInput:
+            id: precio_venta
+            hint_text: 'Precio de Venta'
+        TextInput:
+            id: proveedor
+            hint_text: 'Proveedor'
+        TextInput:
+            id: categoria
+            hint_text: 'Categoría'
+        CustomButton:
+            text: 'Guardar'
+            on_press: root.guardar_cambios()
+        CustomButton:
+            text: 'Cancelar'
+            on_press: app.root.current = 'home'
+
 # Pantalla de creador
 <CreadorScreen>:
     name: "creador"

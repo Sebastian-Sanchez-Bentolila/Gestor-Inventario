@@ -32,11 +32,12 @@ class HomeScreen(Screen):
                 
                 box = BoxLayout(orientation='horizontal', padding=10, spacing=10, size_hint_y=None, height=50)
                 with box.canvas.before:
-                    Color(0, 0, 0, 0.1)  # Color de fondo (negro translúcido)
+                    Color(0, 0, 0, 0.1)  
                     Rectangle(pos=box.pos, size=box.size)
                 
                 box.bind(size=self._update_rect, pos=self._update_rect)
 
+                # Caracteristicas de cada producto de la tabla stock
                 box.add_widget(Label(text=f"ID: {producto_id}", color=(0, 0, 0, 1), font_size=18))
                 box.add_widget(Label(text=f"{nombre}", color=(0, 0, 0, 1), font_size=18))
                 box.add_widget(Label(text=f"{cantidad}", color=(0, 0, 0, 1), font_size=18))
@@ -44,6 +45,13 @@ class HomeScreen(Screen):
                 box.add_widget(Label(text=f"{precio_venta}", color=(0, 0, 0, 1), font_size=18))
                 box.add_widget(Label(text=f"{proveedor}", color=(0, 0, 0, 1), font_size=18))
                 box.add_widget(Label(text=f"{categoria}", color=(0, 0, 0, 1), font_size=18))
+                
+                # Botón de modificar
+                editar_btn = Button(size_hint=(None, None), size=(50, 50))
+                editar_btn.background_normal = 'archivos/img/editar.png'  
+                editar_btn.producto_id = producto_id
+                editar_btn.bind(on_press=self.editar_producto)
+                box.add_widget(editar_btn)
                 
                 # Botón de eliminar
                 eliminar_btn = Button(text="Eliminar", size_hint=(None, None), size=(100, 30))
@@ -68,6 +76,14 @@ class HomeScreen(Screen):
         except Exception as e:
             print(f"Error al eliminar producto: {e}")
 
+    def editar_producto(self, instance):
+        producto_id = instance.producto_id
+        edit_screen = self.manager.get_screen('edit')
+        producto = self.db.seleccionar_producto(producto_id)
+        if producto:
+            edit_screen.cargar_datos(producto)
+        self.manager.current = 'edit'
+        
     def _update_rect(self, instance, value):
         instance.canvas.before.children[-1].pos = instance.pos
         instance.canvas.before.children[-1].size = instance.size
@@ -93,6 +109,30 @@ class AltaScreen(Screen):
         except Exception as e:
             print(f"Error al agregar producto: {e}")
 
+class EditScreen(Screen):
+    def cargar_datos(self, producto):
+        producto_id, nombre, cantidad, costo, precio_venta, proveedor, categoria = producto
+        self.ids.producto_id.text = str(producto_id)
+        self.ids.producto.text = nombre
+        self.ids.cantidad.text = str(cantidad)
+        self.ids.costo.text = str(costo)
+        self.ids.precio_venta.text = str(precio_venta)
+        self.ids.proveedor.text = proveedor
+        self.ids.categoria.text = categoria
+
+    def guardar_cambios(self):
+        producto_id = int(self.ids.producto_id.text)
+        producto = self.ids.producto.text
+        cantidad = int(self.ids.cantidad.text)
+        costo = float(self.ids.costo.text)
+        precio_venta = float(self.ids.precio_venta.text)
+        proveedor = self.ids.proveedor.text
+        categoria = self.ids.categoria.text
+
+        self.db.actualizar(producto_id, producto, cantidad, costo, precio_venta, proveedor, categoria)
+        self.manager.current = 'home'
+        
+        
 class CreadorScreen(Screen):
     # Clase de la pagina - Creador
     pass
