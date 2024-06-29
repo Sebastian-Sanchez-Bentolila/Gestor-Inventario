@@ -182,5 +182,5 @@ class EstadisticasScreen(Screen):
         self.ids.img_stats_container.clear_widgets()
 
         # Agregar nuevos gráficos
-        self.ids.img_stats_container.add_widget(Image(source='archivos/img/grafico_barras.png'))
-        self.ids.img_stats_container.add_widget(Image(source='archivos/img/grafico_torta.png'))
+        self.ids.img_stats_container.add_widget(Image(source='archivos/img/grafico_barras.png', size_hint_y=None, height=800))
+        self.ids.img_stats_container.add_widget(Image(source='archivos/img/grafico_torta.png', size_hint_y=None, height=800))

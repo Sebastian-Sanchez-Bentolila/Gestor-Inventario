@@ -192,7 +192,7 @@
             text: "Volver al Menú"
             on_press: root.manager.current = 'menu'
 
-# Pantalla de estadistica
+# Pantalla de estadística
 <EstadisticasScreen>:
     name: "estadisticas"
     BoxLayout:
@@ -201,7 +201,7 @@
         spacing: 10
         canvas.before:
             Color:
-                rgba: (0.75, 0.85, 1, 1)  
+                rgba: (0.75, 0.85, 1, 1)
             Rectangle:
                 pos: self.pos
                 size: self.size
@@ -209,6 +209,17 @@
             text: "Estadísticas del Inventario"
             font_size: 32
             color: 0, 0, 0, 1
+        
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            BoxLayout:
+                id: img_stats_container
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                padding: 10
+                spacing: 10
         BoxLayout:
             orientation: 'vertical'
             Label:
@@ -236,14 +247,6 @@
                 text: "Ingresos Potenciales (por ventas): "
                 font_size: 18
                 color: 0, 0, 0, 1
-        ScrollView:
-            BoxLayout:
-                id: img_stats_container
-                orientation: 'vertical'
-                padding: 10
-                spacing: 10
-                size_hint: (1, 4.5)
-                height: self.minimum_height
         CustomButton:
             text: "Volver al Menú"
             background_color: (0.16, 0.15, 0.95, 1)
