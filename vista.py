@@ -7,6 +7,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.graphics import Color, Rectangle
 from kivy.uix.button import Button
+from kivy.uix.image import Image
 from modelo import BaseDatos  
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -49,8 +50,8 @@ class HomeScreen(Screen):
                 box.add_widget(Label(text=f"{proveedor}", color=(0, 0, 0, 1), font_size=18))
                 box.add_widget(Label(text=f"{categoria}", color=(0, 0, 0, 1), font_size=18))
                 
-                # Botón de modificar {´´}¨´{´¨¨'?¡{o}}
-                editar_btn = Button(size_hint=(None, None), size=(45, 45))
+                # Botón de modificar 
+                editar_btn = Button(size_hint=(None, None), size=(32, 32))
                 editar_btn.background_normal = 'archivos/img/editar.png'  
                 editar_btn.producto_id = producto_id
                 editar_btn.bind(on_press=self.editar_producto)
@@ -176,3 +177,10 @@ class EstadisticasScreen(Screen):
         plt.savefig('archivos/img/grafico_torta.png')
         plt.close()
         base_datos.cerrar_db()
+        
+        # Limpiar widgets
+        self.ids.img_stats_container.clear_widgets()
+
+        # Agregar nuevos gráficos
+        self.ids.img_stats_container.add_widget(Image(source='archivos/img/grafico_barras.png'))
+        self.ids.img_stats_container.add_widget(Image(source='archivos/img/grafico_torta.png'))

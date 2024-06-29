@@ -60,6 +60,7 @@ class BaseDatos():
         return rows
     
     def seleccionar_producto(self, id):
+        # Seleccionando un los elementos de la tabla
         self.cursor.execute('SELECT * FROM stock WHERE id=?', (id,))
         return self.cursor.fetchone()
 
@@ -72,6 +73,7 @@ class BaseDatos():
         self.guardar_cambios()
         
     def actualizar(self, id, producto, cantidad, costo, precio_venta, proveedor, categoria):
+        # Actualiza un producto 
         try:
             data = (producto, cantidad, costo, precio_venta, proveedor, categoria, id)
             self.cursor.execute('UPDATE stock SET producto=?, cantidad=?, costo=?, precio_venta=?, proveedor=?, categoria=? WHERE id=?', data)

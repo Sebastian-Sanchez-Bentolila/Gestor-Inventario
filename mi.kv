@@ -34,12 +34,10 @@
             text: "Tabla de Mercaderias/Productos"
             font_size: 32
             color: 0, 0, 0, 1
-
         Label:
             text: "ID     Producto      Cantidad      Costo   Precio_venta    Proveedor   Categoria"
             font_size: 28
-            color: 0, 0, 0, 1
-                
+            color: 0, 0, 0, 1        
         ScrollView:
             GridLayout:
                 id: product_grid
@@ -48,7 +46,6 @@
                 height: self.minimum_height
                 spacing: 10
                 padding: 10
-
         CustomButton:
             text: "Volver al Menú"
             on_press: root.manager.current = 'menu'
@@ -105,9 +102,16 @@
         orientation: 'vertical'
         padding: 10
         spacing: 10
+        canvas.before:
+            Color:
+                rgba: (0.75, 0.85, 1, 1)  
+            Rectangle:
+                pos: self.pos
+                size: self.size
         Label:
             text: 'Editar Producto'
-            font_size: 24
+            font_size: 32
+            color: 0, 0, 0, 1
         TextInput:
             id: producto_id
             hint_text: 'ID del Producto'
@@ -210,41 +214,36 @@
             Label:
                 id: total_productos
                 text: "Cantidad Total de Productos: "
-                font_size: 24
+                font_size: 18
                 color: 0, 0, 0, 1
             Label:
                 id: mayor_stock
                 text: "Producto con Mayor Stock: "
-                font_size: 24
+                font_size: 18
                 color: 0, 0, 0, 1
             Label:
                 id: menor_stock
                 text: "Producto con Menor Stock: "
-                font_size: 24
+                font_size: 18
                 color: 0, 0, 0, 1
             Label:
                 id: valor_total_inventario
                 text: "Valor Total del Inventario (en costos): "
-                font_size: 24
+                font_size: 18
                 color: 0, 0, 0, 1
             Label:
                 id: ingresos_potenciales
                 text: "Ingresos Potenciales (por ventas): "
-                font_size: 24
+                font_size: 18
                 color: 0, 0, 0, 1
         ScrollView:
             BoxLayout:
-                cols:1
-                orientation: 'vertical'  
+                id: img_stats_container
+                orientation: 'vertical'
                 padding: 10
                 spacing: 10
                 size_hint: (1, 4.5)
-                Image:
-                    id: img_stats
-                    source: 'archivos/img/grafico_barras.png'  
-                Image:
-                    id: img_stats
-                    source: 'archivos/img/grafico_torta.png'
+                height: self.minimum_height
         CustomButton:
             text: "Volver al Menú"
             background_color: (0.16, 0.15, 0.95, 1)
