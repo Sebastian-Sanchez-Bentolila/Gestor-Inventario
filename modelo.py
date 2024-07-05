@@ -8,7 +8,7 @@ import sqlite3
 class BaseDatos():
     # Clase para el manejo de la base de datos 
     def __init__(self,):
-        self.con = sqlite3.connect('base-datos/inventario.db')
+        self.con = sqlite3.connect('archivos/base-datos/inventario.db')
         self.cursor = self.con.cursor()
         self.sql = ""
         self.observadores = []

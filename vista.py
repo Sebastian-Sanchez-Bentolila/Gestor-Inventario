@@ -147,6 +147,10 @@ class EstadisticasScreen(Screen):
     def on_enter(self, *args):
         base_datos = BaseDatos()
         stats = base_datos.obtener_estadisticas()
+        
+        # Limpiar widgets
+        self.ids.img_stats_container.clear_widgets()
+        
         # Estadísticas
         self.ids.total_productos.text = f"Cantidad Total de Productos: {stats['total_productos']}"
         self.ids.mayor_stock.text = f"Producto con Mayor Stock: {stats['mayor_stock'][0]} ({stats['mayor_stock'][1]})"
@@ -177,9 +181,6 @@ class EstadisticasScreen(Screen):
         plt.savefig('archivos/img/grafico_torta.png')
         plt.close()
         base_datos.cerrar_db()
-        
-        # Limpiar widgets
-        self.ids.img_stats_container.clear_widgets()
 
         # Agregar nuevos gráficos
         self.ids.img_stats_container.add_widget(Image(source='archivos/img/grafico_barras.png', size_hint_y=None, height=800))
